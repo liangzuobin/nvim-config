@@ -28,17 +28,15 @@ return require('packer').startup(function(use)
     },
     tag = 'nightly'
   }
-  use 'sainnhe/everforest'
+  use 'sainnhe/everforest' -- color theme
 
   use 'rmagatti/alternate-toggler'
   use 'windwp/nvim-autopairs'
   use 'mg979/vim-visual-multi'
   use 'gcmt/wildfire.vim'
   use 'tpope/vim-surround'
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
+
+  -- fuzzy finder
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     requires = { { 'nvim-lua/plenary.nvim' } }
@@ -62,8 +60,20 @@ return require('packer').startup(function(use)
   use 'p00f/nvim-ts-rainbow'
   use 'axelvc/template-string.nvim'
   use 'xiyaowong/nvim-transparent'
-  use 'folke/todo-comments.nvim'
-  use 'numToStr/Comment.nvim'
+  use {
+    "folke/todo-comments.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup {
+      }
+    end
+  }
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
   use({
     'akinsho/toggleterm.nvim',
     tag = '*'
