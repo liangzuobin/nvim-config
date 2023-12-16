@@ -38,7 +38,7 @@ return require('packer').startup(function(use)
 
   -- fuzzy finder
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    'nvim-telescope/telescope.nvim',
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
   use 'MattesGroeger/vim-bookmarks'
@@ -53,13 +53,13 @@ return require('packer').startup(function(use)
 
   use 'L3MON4D3/LuaSnip'
   use 'saadparwaiz1/cmp_luasnip'
-  use 'jose-elias-alvarez/typescript.nvim'
+  -- use 'jose-elias-alvarez/typescript.nvim'
   use 'jose-elias-alvarez/null-ls.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'windwp/nvim-ts-autotag'
-  use 'p00f/nvim-ts-rainbow'
-  use 'axelvc/template-string.nvim'
-  use 'xiyaowong/nvim-transparent'
+  -- use 'nvim-treesitter/nvim-treesitter'
+  -- use 'windwp/nvim-ts-autotag'
+  -- use 'p00f/nvim-ts-rainbow'
+  -- use 'axelvc/template-string.nvim'
+  -- use 'xiyaowong/nvim-transparent'
   use {
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -78,13 +78,13 @@ return require('packer').startup(function(use)
     'akinsho/toggleterm.nvim',
     tag = '*'
   })
-  use 'tpope/vim-obsession'
-  use 'dhruvasagar/vim-prosession'
+  -- use 'tpope/vim-obsession'
+  -- use 'dhruvasagar/vim-prosession'
   use('f-person/git-blame.nvim')
-  use('github/copilot.vim')
+  -- use('github/copilot.vim')
   use({
     "glepnir/lspsaga.nvim",
-    branch = "main",
+    branch = "main"
   })
   use {
     'phaazon/hop.nvim',
