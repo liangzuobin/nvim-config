@@ -16,11 +16,28 @@ return require('packer').startup(function(use)
     }
   })
   use 'wbthomason/packer.nvim'
-  use {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "neovim/nvim-lspconfig",
-  }
+  -- LSP 相关的
+  -- 准备用 coc 来替换掉一堆其它插件
+  use { 'neoclide/coc.nvim', branch = 'release' }
+  -- use {
+  --   "williamboman/mason.nvim",
+  --   "williamboman/mason-lspconfig.nvim",
+  --   "neovim/nvim-lspconfig",
+  -- }
+  -- use 'L3MON4D3/LuaSnip'
+  -- use 'saadparwaiz1/cmp_luasnip'
+  -- use 'jose-elias-alvarez/null-ls.nvim'
+  -- use 'hrsh7th/cmp-nvim-lsp'
+  -- use 'hrsh7th/cmp-buffer'
+  -- use 'hrsh7th/cmp-path'
+  -- use 'hrsh7th/cmp-cmdline'
+  -- use 'hrsh7th/nvim-cmp'
+  -- use 'onsails/lspkind-nvim'
+  -- use({
+  --   "glepnir/lspsaga.nvim",
+  --   branch = "main"
+  -- })
+
   use {
     'nvim-tree/nvim-tree.lua',
     requires = {
@@ -36,6 +53,7 @@ return require('packer').startup(function(use)
   use 'gcmt/wildfire.vim'
   use 'tpope/vim-surround'
 
+
   -- fuzzy finder
   use {
     'nvim-telescope/telescope.nvim',
@@ -44,22 +62,7 @@ return require('packer').startup(function(use)
   use 'MattesGroeger/vim-bookmarks'
   use 'tom-anders/telescope-vim-bookmarks.nvim'
 
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
-  use 'onsails/lspkind-nvim'
 
-  use 'L3MON4D3/LuaSnip'
-  use 'saadparwaiz1/cmp_luasnip'
-  -- use 'jose-elias-alvarez/typescript.nvim'
-  use 'jose-elias-alvarez/null-ls.nvim'
-  -- use 'nvim-treesitter/nvim-treesitter'
-  -- use 'windwp/nvim-ts-autotag'
-  -- use 'p00f/nvim-ts-rainbow'
-  -- use 'axelvc/template-string.nvim'
-  -- use 'xiyaowong/nvim-transparent'
   use {
     "folke/todo-comments.nvim",
     requires = "nvim-lua/plenary.nvim",
@@ -82,10 +85,13 @@ return require('packer').startup(function(use)
   -- use 'dhruvasagar/vim-prosession'
   use('f-person/git-blame.nvim')
   -- use('github/copilot.vim')
-  use({
-    "glepnir/lspsaga.nvim",
-    branch = "main"
-  })
+  --
+  use {
+    'dnlhc/glance.nvim',
+    config = function()
+      require('glance').setup {}
+    end
+  }
   use {
     'phaazon/hop.nvim',
     branch = 'v2',
