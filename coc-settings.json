@@ -1,12 +1,23 @@
 {
   "languageserver": {
-    "golang": {
+    "go": {
       "command": "gopls",
-      "rootPatterns": ["go.mod", "go.work", ".git/", ".hg"],
-      "filetypes": ["go"],
+      "rootPatterns": [
+        "go.mod",
+        "go.work",
+        ".git/",
+        ".hg"
+      ],
+      "filetypes": [
+        "go"
+      ],
       "initializationOptions": {
-        "buildFlags": ["-tags"],
-        "directoryFilters": ["-**/node_modules"],
+        "buildFlags": [
+          "-tags"
+        ],
+        "directoryFilters": [
+          "-**/node_modules"
+        ],
         "usePlaceholders": false,
         "gofumpt": true
       }

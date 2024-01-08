@@ -1,102 +1,234 @@
-vim.cmd [[packadd packer.nvim]]
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua PackerSync
-  augroup end
-]])
-
-return require('packer').startup(function(use)
-  use({
-    "folke/noice.nvim",
-    requires = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    }
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   })
-  use 'wbthomason/packer.nvim'
-  -- LSP 相关的
-  -- 准备用 coc 来替换掉一堆其它插件
-  use { 'neoclide/coc.nvim', branch = 'release' }
-  -- use {
-  --   "williamboman/mason.nvim",
-  --   "williamboman/mason-lspconfig.nvim",
-  --   "neovim/nvim-lspconfig",
-  -- }
-  -- use 'L3MON4D3/LuaSnip'
-  -- use 'saadparwaiz1/cmp_luasnip'
-  -- use 'jose-elias-alvarez/null-ls.nvim'
-  -- use 'hrsh7th/cmp-nvim-lsp'
-  -- use 'hrsh7th/cmp-buffer'
-  -- use 'hrsh7th/cmp-path'
-  -- use 'hrsh7th/cmp-cmdline'
-  -- use 'hrsh7th/nvim-cmp'
-  -- use 'onsails/lspkind-nvim'
-  -- use({
-  --   "glepnir/lspsaga.nvim",
-  --   branch = "main"
-  -- })
+end
 
-  use {
-    'nvim-tree/nvim-tree.lua',
-    requires = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    tag = 'nightly'
-  }
-  use 'sainnhe/everforest' -- color theme
+vim.opt.rtp:prepend(lazypath)
 
-  use 'rmagatti/alternate-toggler'
-  use 'windwp/nvim-autopairs'
-  use 'mg979/vim-visual-multi'
-  use 'gcmt/wildfire.vim'
-  use 'tpope/vim-surround'
-
-
-  -- fuzzy finder
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-  }
-  use 'MattesGroeger/vim-bookmarks'
-  use 'tom-anders/telescope-vim-bookmarks.nvim'
-
-
-  use {
-    "folke/todo-comments.nvim",
-    requires = "nvim-lua/plenary.nvim",
+require("lazy").setup({
+  {
+    "sainnhe/everforest",
+    version = false,
+    lazy = false,
+    priority = 1000,
     config = function()
-      require("todo-comments").setup {
+      vim.g.everforest_diagnostic_line_highlight = 1
+      vim.cmd('colorscheme everforest')
+      vim.fn.sign_define({
+        {
+          name = 'DiagnosticSignError',
+          text = '',
+          texthl = 'DiagnosticSignError',
+          linehl = 'ErrorLine',
+        },
+        {
+          name = 'DiagnosticSignWarn',
+          text = '',
+          texthl = 'DiagnosticSignWarn',
+          linehl = 'WarningLine',
+        },
+        {
+          name = 'DiagnosticSignInfo',
+          text = '',
+          texthl = 'DiagnosticSignInfo',
+          linehl = 'InfoLine',
+        },
+        {
+          name = 'DiagnosticSignHint',
+          text = '',
+          texthl = 'DiagnosticSignHint',
+          linehl = 'HintLine',
+        },
+      })
+    end,
+  },
+  {
+    'nvim-telescope/telescope.nvim',
+    lazy = true,
+    dependencies = { { 'nvim-lua/plenary.nvim' } },
+    config = function()
+      local builtin = require('telescope.builtin')
+      vim.keymap.set('n', '<leader><leader>f', builtin.find_files, {})
+      vim.keymap.set('n', '<leader><leader>g', builtin.live_grep, {})
+
+      local actions = require('telescope.actions')
+      require('nvim-web-devicons').setup({
+        override = {},
+        default = true
+      })
+      require('telescope').setup {
+        defaults = {
+          path_display = { 'smart' },
+          mappings = {
+            i = {
+              ["<C-u>"] = actions.preview_scrolling_up,
+              ["<C-d>"] = actions.preview_scrolling_down,
+              ["<esc>"] = actions.close
+            }
+          }
+        },
+        layout_config = {
+          horizontal = {
+            preview_cutoff = 100,
+            preview_width = 0.6
+          }
+        }
       }
     end
-  }
-  use {
-    'numToStr/Comment.nvim',
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    lazy = true,
+    branch = "v3.x",
+    keys = {
+      { "<c-e>", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
+    }
+  },
+  {
+    "mg979/vim-visual-multi",
+    branch = "master",
+    lazy = true,
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    lazy = true,
+    config = function()
+      require 'todo-comments'.setup()
+    end
+  },
+  {
+    "numToStr/Comment.nvim",
     config = function()
       require('Comment').setup()
     end
-  }
-  use({
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        lsp = {
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        routes = {
+          {
+            filter = {
+              event = "msg_show",
+              kind = "",
+              find = "written",
+            },
+            opts = { skip = true },
+          },
+        },
+      })
+    end
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {
+      map_bs = false,
+      map_cr = false
+    }
+  },
+  {
     'akinsho/toggleterm.nvim',
-    tag = '*'
-  })
-  -- use 'tpope/vim-obsession'
-  -- use 'dhruvasagar/vim-prosession'
-  use('f-person/git-blame.nvim')
-  -- use('github/copilot.vim')
-  --
-  use {
-    'dnlhc/glance.nvim',
+    version = "*",
+    lazy = true,
+    keys = {
+      { "<c-\\>", "<cmd>ToggleTerm<cr>", desc = "ToggleTerm" },
+    },
     config = function()
-      require('glance').setup {}
+      require('toggleterm').setup({
+        direction = 'float',
+        open_mapping = [[<c-\>]]
+      })
     end
-  }
-  use {
-    'phaazon/hop.nvim',
-    branch = 'v2',
+  },
+  {
+    "f-person/git-blame.nvim",
+    lazy = true
+  },
+  {
+    "phaazon/hop.nvim",
+    lazy = true,
+    keys = {
+      -- { "<leader><leader>s", "<cmd>HopPattern<CR>",                    mode = { "n" } },
+      { "<leader><leader>s", "<cmd>lua require'hop'.hint_char1()<cr>", mode = { "n" } },
+      {
+        "f",
+        function()
+          local hop = require('hop')
+          local directions = require('hop.hint').HintDirection
+          hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
+        end,
+        mode = { "n" }
+      },
+      {
+        "F",
+        function()
+          local hop = require('hop')
+          local directions = require('hop.hint').HintDirection
+          hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
+        end,
+        mode = { "n" }
+      },
+      {
+        "t",
+        function()
+          local hop = require('hop')
+          local directions = require('hop.hint').HintDirection
+          hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
+        end,
+        mode = { "n" }
+      },
+      {
+        "T",
+        function()
+          local hop = require('hop')
+          local directions = require('hop.hint').HintDirection
+          hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
+        end,
+        mode = { "n" }
+      },
+    },
     config = function()
-      require 'hop'.setup {}
+      require 'hop'.setup { term_seq_bias = 0.5 }
     end
+  },
+  {
+    import = "coc"
+  },
+  {
+    "vim-airline/vim-airline",
+    lazy = false,
+    priority = 1000,
+    dependencies = {
+      { "vim-airline/vim-airline-themes" },
+      { "ryanoasis/vim-devicons" },
+    }
   }
-end)
+})
