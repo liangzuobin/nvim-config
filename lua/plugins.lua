@@ -51,13 +51,20 @@ require("lazy").setup({
     end,
   },
   {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build =
+    'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+  },
+  {
     'nvim-telescope/telescope.nvim',
-    lazy = true,
-    dependencies = { { 'nvim-lua/plenary.nvim' } },
+    lazy = false,
+    dependencies = { { 'nvim-lua/plenary.nvim' }, { 'BurntSushi/ripgrep' } },
     config = function()
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader><leader>f', builtin.find_files, {})
       vim.keymap.set('n', '<leader><leader>g', builtin.live_grep, {})
+      vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
+      -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
       local actions = require('telescope.actions')
       require('nvim-web-devicons').setup({
@@ -80,8 +87,22 @@ require("lazy").setup({
             preview_cutoff = 100,
             preview_width = 0.6
           }
+        },
+        -- You dont need to set any of these options. These are the default ones. Only
+        -- the loading is important
+        extensions = {
+          fzf = {
+            fuzzy = true,                   -- false will only do exact matching
+            override_generic_sorter = true, -- override the generic sorter
+            override_file_sorter = true,    -- override the file sorter
+            case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+            -- the default case_mode is "smart_case"
+          }
         }
       }
+      -- To get fzf loaded and working with telescope, you need to call
+      -- load_extension, somewhere after setup function:
+      require('telescope').load_extension('fzf')
     end
   },
   {
@@ -96,7 +117,17 @@ require("lazy").setup({
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
       "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
-    }
+    },
+    config = function()
+      require('neo-tree').setup({
+        filesystem = {
+          filtered_items = {
+            visible = true,
+            hide_dotfiles = false,
+          }
+        }
+      })
+    end
   },
   {
     "mg979/vim-visual-multi",
@@ -221,6 +252,10 @@ require("lazy").setup({
   },
   {
     import = "coc"
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { { 'mfussenegger/nvim-dap' } },
   },
   {
     "vim-airline/vim-airline",

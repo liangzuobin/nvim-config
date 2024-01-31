@@ -1,26 +1,99 @@
 {
-  "languageserver": {
-    "go": {
-      "command": "gopls",
-      "rootPatterns": [
-        "go.mod",
-        "go.work",
-        ".git/",
-        ".hg"
-      ],
-      "filetypes": [
-        "go"
-      ],
-      "initializationOptions": {
-        "buildFlags": [
-          "-tags"
-        ],
-        "directoryFilters": [
-          "-**/node_modules"
-        ],
-        "usePlaceholders": false,
-        "gofumpt": true
-      }
-    }
-  }
+  "languageserver": {},
+  "clangd.arguments": [
+    "--all-scopes-completion",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-parse=auto",
+    "--completion-style=detailed",
+    "--function-arg-placeholders=true",
+    "--query-driver=/usr/bin/clang++",
+    "--header-insertion-decorators=false",
+    "--header-insertion=iwyu",
+    "-j=8"
+  ],
+  "go.goplsOptions": {
+    "codelenses": {
+      "test": true
+    },
+    "experimentalPostfixCompletions": true,
+    "gofumpt": true,
+    "hints": {
+      "assignVariableTypes": true,
+      "compositeLiteralFields": true,
+      "compositeLiteralTypes": true,
+      "constantValues": true,
+      "functionTypeParameters": true,
+      "parameterNames": true,
+      "rangeVariableTypes": true
+    },
+    "linksInHover": false,
+    "semanticTokens": true,
+    "staticcheck": true,
+    "usePlaceholders": false
+  },
+  "Lua.completion.callSnippet": "Both",
+  "Lua.completion.postfix": ".",
+  "Lua.diagnostics.globals": [
+    "vim",
+    "jit"
+  ],
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.workspace.checkThirdParty": false,
+  "pyright.organizeimports.provider": "pyright",
+  "python.analysis.diagnosticMode": "workspace",
+  "python.formatting.provider": "ruff",
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  "pullDiagnostic.onChange": false,
+  "pullDiagnostic.onSave": true,
+  "notification.statusLineProgress": true,
+  "coc.preferences.enableLinkedEditing": true,
+  "coc.preferences.enableMessageDialog": true,
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.formatOnSave": true,
+  "coc.preferences.formatOnType": false,
+  "coc.preferences.useQuickfixForLocations": true,
+  "coc.preferences.willSaveHandlerTimeout": 1000,
+  "coc.source.file.ignoreHidden": false,
+  "codeLens.enable": true,
+  "codeLens.position": "eol",
+  "colors.enable": true,
+  "diagnostic.checkCurrentLine": true,
+  "diagnostic.floatConfig": {
+    "border": true,
+    "rounded": true
+  },
+  "diagnostic.format": "%message [%source]",
+  "diagnostic.separateRelatedInformationAsDiagnostics": true,
+  "diagnostic.virtualText": true,
+  "hover.floatConfig": {
+    "border": true,
+    "rounded": true
+  },
+  "inlayHint.display": false,
+  "links.highlight": true,
+  "links.tooltip": true,
+  "semanticTokens.enable": true,
+  "signature.floatConfig": {
+    "border": true,
+    "rounded": true
+  },
+  "signature.target": "echo",
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.defaultSortMethod": "none",
+  "suggest.detailField": "abbr",
+  "suggest.floatConfig": {
+    "border": true,
+    "rounded": true
+  },
+  "suggest.selection": "recentlyUsedByPrefix",
+  "workspace.ignoredFolders": [
+    "$HOME",
+    "$HOME/.cargo/**",
+    "$HOME/.rustup/**",
+    "$HOME/pkg/mod/**",
+    "$HOMEBREW_PREFIX",
+    "$HOMEBREW_PREFIX/**"
+  ]
 }
