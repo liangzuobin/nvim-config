@@ -38,6 +38,7 @@
   "python.formatting.provider": "ruff",
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
+  "sql.database": "mysql",
   "pullDiagnostic.onChange": false,
   "pullDiagnostic.onSave": true,
   "notification.statusLineProgress": true,

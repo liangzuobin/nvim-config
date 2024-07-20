@@ -70,10 +70,12 @@ M.config = function()
   })
 
   vim.api.nvim_create_autocmd("BufWritePre", {
+    group = "CocGroup",
     pattern = "*.go",
-    callback = function()
-      vim.cmd("silent call CocAction('runCommand', 'editor.action.organizeImport')")
-    end,
+    command = "silent call CocAction('runCommand', 'editor.action.organizeImport')",
+    -- callback = function()
+    --   vim.cmd("silent call CocAction('runCommand', 'editor.action.organizeImport')")
+    -- end,
     desc = "Auto import missing packages for go file"
   })
 

@@ -58,19 +58,31 @@ require("lazy").setup({
   {
     'nvim-telescope/telescope.nvim',
     lazy = false,
-    dependencies = { { 'nvim-lua/plenary.nvim' }, { 'BurntSushi/ripgrep' } },
+    dependencies = {
+      { 'BurntSushi/ripgrep' },
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-tree/nvim-web-devicons" },
+      { "debugloop/telescope-undo.nvim" },
+      { "jvgrootveld/telescope-zoxide" },
+      { "nvim-telescope/telescope-frecency.nvim" },
+      { "nvim-telescope/telescope-live-grep-args.nvim" },
+      { "nvim-telescope/telescope-fzf-native.nvim",    build = "make" },
+    },
     config = function()
       local builtin = require('telescope.builtin')
+      local actions = require('telescope.actions')
+      local z_utils = require("telescope._extensions.zoxide.utils")
+
       vim.keymap.set('n', '<leader><leader>f', builtin.find_files, {})
       vim.keymap.set('n', '<leader><leader>g', builtin.live_grep, {})
       vim.keymap.set('n', '<leader><leader>b', builtin.buffers, {})
-      -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+      vim.keymap.set('n', '<leader><leader>h', builtin.help_tags, {})
 
-      local actions = require('telescope.actions')
       require('nvim-web-devicons').setup({
         override = {},
         default = true
       })
+
       require('telescope').setup {
         defaults = {
           path_display = { 'smart' },
@@ -88,21 +100,50 @@ require("lazy").setup({
             preview_width = 0.6
           }
         },
-        -- You dont need to set any of these options. These are the default ones. Only
-        -- the loading is important
         extensions = {
           fzf = {
             fuzzy = true,                   -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
             override_file_sorter = true,    -- override the file sorter
             case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
-            -- the default case_mode is "smart_case"
+          },
+          zoxide = {
+            mappings = {
+              default = {
+                action = function(selection)
+                  vim.cmd.edit(selection.path)
+                end,
+                after_action = function(selection)
+                  print("Directory changed to " .. selection.path)
+                end
+              },
+              ["<C-s>"] = { action = z_utils.create_basic_command("split") },
+              ["<C-v>"] = { action = z_utils.create_basic_command("vsplit") },
+              ["<C-e>"] = { action = z_utils.create_basic_command("edit") },
+              ["<C-b>"] = {
+                keepinsert = true,
+                action = function(selection)
+                  builtin.file_browser({ cwd = selection.path })
+                end
+              },
+              ["<C-f>"] = {
+                keepinsert = true,
+                action = function(selection)
+                  builtin.find_files({ cwd = selection.path })
+                end
+              },
+              ["<C-t>"] = {
+                action = function(selection)
+                  vim.cmd.tcd(selection.path)
+                end
+              }
+            }
           }
         }
       }
-      -- To get fzf loaded and working with telescope, you need to call
-      -- load_extension, somewhere after setup function:
+
       require('telescope').load_extension('fzf')
+      require('telescope').load_extension('zoxide')
     end
   },
   {
@@ -120,11 +161,19 @@ require("lazy").setup({
     },
     config = function()
       require('neo-tree').setup({
+        window = {
+          position = "left",
+          width = 30,
+        },
         filesystem = {
           filtered_items = {
             visible = true,
             hide_dotfiles = false,
-          }
+          },
+          follow_current_file = {
+            enabled = true,
+            leave_dirs_open = true,
+          },
         }
       })
     end
@@ -132,7 +181,7 @@ require("lazy").setup({
   {
     "mg979/vim-visual-multi",
     branch = "master",
-    lazy = true,
+    lazy = false,
   },
   {
     "folke/todo-comments.nvim",
@@ -201,7 +250,7 @@ require("lazy").setup({
   },
   {
     "f-person/git-blame.nvim",
-    lazy = true
+    lazy = false
   },
   {
     "phaazon/hop.nvim",
@@ -265,5 +314,14 @@ require("lazy").setup({
   --     { "vim-airline/vim-airline-themes" },
   --     { "ryanoasis/vim-devicons" },
   --   }
-  -- }
+  -- },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+    opts = {}
+  },
 })
