@@ -1,6 +1,8 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
+  "CopilotChat.nvim": { "branch": "main", "commit": "2ebe591cff06018e265263e71e1dbc4c5aa8281e" },
   "coc.nvim": { "branch": "master", "commit": "bdfd169a5c5a65cc701320aa3f807735768956a7" },
+  "copilot.vim": { "branch": "release", "commit": "87038123804796ca7af20d1b71c3428d858a9124" },
   "everforest": { "branch": "master", "commit": "752a026157f5befaf705bccbcb2ddb5b67703e03" },
   "git-blame.nvim": { "branch": "master", "commit": "408d5487d908dfe5d48e5645d8b27ddcc16b11e0" },
   "hop.nvim": { "branch": "master", "commit": "1a1eceafe54b5081eae4cb91c723abd1d450f34b" },
